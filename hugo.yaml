@@ -1,0 +1,72 @@
+baseURL: https://example.org/
+locale: en-us
+title: My New Hugo Project
+theme: ["PaperMod"]
+
+enableRobotsTXT: true
+buildDrafts: false
+buildFuture: false
+buildExpired: false
+pygmentsUseClasses: true
+mainsections: ["posts"]
+
+pagination:
+  pagerSize: 5
+
+outputs:
+  home:
+    - HTML
+    - RSS
+    - JSON
+
+params:
+  env: production
+  author: "Me"
+  description: "My personal blog"
+  DateFormat: "January 2, 2006"
+  defaultTheme: auto
+
+  ShowReadingTime: true
+  ShowBreadCrumbs: true
+  ShowPostNavLinks: true
+  ShowWordCount: true
+  ShowRssButtonInSectionTermList: true
+  ShowCodeCopyButtons: true
+
+  homeInfoParams:
+    Title: "Hi there 👋"
+    Content: |
+      Welcome to my personal blog. I write about technology, software engineering, and things I find interesting.
+      
+      - Explore my posts below
+      - Use the search to find topics
+      - Browse by tags
+
+  socialIcons:
+    - name: github
+      url: "https://github.com/example"
+    - name: x
+      url: "https://x.com/example"
+    - name: instagram
+      url: "https://instagram.com/example"
+    - name: telegram
+      url: "https://t.me/example"
+
+menu:
+  main:
+    - identifier: about
+      name: About Me
+      url: /about/
+      weight: 1
+    - identifier: archives
+      name: Archive
+      url: /archives/
+      weight: 2
+    - identifier: search
+      name: Search
+      url: /search/
+      weight: 3
+    - identifier: tags
+      name: Tags
+      url: /tags/
+      weight: 4
