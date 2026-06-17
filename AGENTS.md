@@ -8,6 +8,7 @@ This is a Hugo static site using the PaperMod theme.
 - **Installed via**: Git submodule at `themes/PaperMod`
 - **Wiki docs**: https://github.com/adityatelange/hugo-PaperMod/wiki
 - **Example site source**: https://github.com/adityatelange/hugo-PaperMod/tree/exampleSite
+- **baseURL**: `https://mrsydar.dev/`
 
 ## Project Structure
 
@@ -28,15 +29,34 @@ This is a Hugo static site using the PaperMod theme.
 
 Site config is `hugo.yaml` (root level).
 
-- `baseURL`: site URL
+- `baseURL`: `https://mrsydar.dev/`
 - `title`: site title
 - `theme`: `["PaperMod"]` -- theme name
-- `paginate`: posts per page (e.g. `5`)
+- `pagination.pagerSize`: posts per page (e.g. `5`)
 - `enableRobotsTXT`: `true`
 - `buildDrafts`: `false`
 - `pygmentsUseClasses`: `true`
 - `mainsections`: list of content sections shown on homepage, e.g. `["posts"]`
 - `menu.main`: navigation entries with `name`, `url`, `weight`
+- `outputs.home`: include `[HTML, RSS, JSON]` — JSON is required for search to work
+- `params.homeInfoParams`: homepage intro block with `Title` and `Content`
+- `params.socialIcons`: list of `{name, url}` for homepage footer
+
+## Homepage Customization
+
+The homepage shows an intro section (`homeInfoParams`) + list of recent posts + social icons.
+
+- **Avatar**: `static/me.jpg` (240×240) is displayed as a circular image above the intro text via a custom `layouts/partials/home_info.html` override.
+- **Social icons**: Configured in `hugo.yaml` under `params.socialIcons`. PaperMod supports a built-in set of icons by name.
+
+## Overriding Theme Files
+
+PaperMod loads partials from `layouts/` before falling back to `themes/PaperMod/layouts/`.
+
+- Override `layouts/partials/home_info.html` to inject avatar image into the homepage intro.
+- Custom CSS goes in `assets/css/extended/anyname.css` and is auto-bundled into the theme stylesheet.
+
+Example `home_info.html` override: embed an `<img class="home-avatar">` before the `<h1>` and add `.home-avatar { border-radius: 50%; ... }` in `assets/css/extended/custom.css`.
 
 ## Creating Posts
 
@@ -143,8 +163,8 @@ The site deploys to **GitHub Pages** via GitHub Actions.
 
 ```bash
 git remote -v
-# origin  git@github.com:mrsydar/mrsydar.github.io.git (fetch)
-# origin  git@github.com:mrsydar/mrsydar.github.io.git (push)
+# origin  git@github.com:MrSydar/mrsydar.github.io.git (fetch)
+# origin  git@github.com:MrSydar/mrsydar.github.io.git (push)
 ```
 
 ### Required GitHub repo settings
