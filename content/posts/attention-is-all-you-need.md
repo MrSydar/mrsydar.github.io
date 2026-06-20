@@ -9,7 +9,7 @@ ShowReadingTime: true
 ShowBreadCrumbs: true
 ShowPostNavLinks: true
 cover:
-    image: "/images/moon-june-18.png"
+    image: "images/moon-june-18.png"
     alt: "Photo of the Moon I took on June 18th. Edited by Gemini."
     caption: "Photo of the Moon I took on June 18th. Edited by Gemini."
     relative: false
