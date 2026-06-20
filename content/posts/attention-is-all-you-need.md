@@ -15,8 +15,6 @@ cover:
     relative: false
 ---
 
-Photo of the Moon I took on June 18th. Edited by Gemini.
-
 <!--more-->
 
 Every project has a purpose. The reason it exists. The goal it perceives. This blog is not an exclusion and at the very beginning of the sprint I am about to start I want to define its direction right here.
