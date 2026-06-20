@@ -1,7 +1,6 @@
 ---
 title: "Attention Is All You Need"
 date: 2026-06-18
-description: "First post — defining the blog's direction and principles"
 author: "Me"
 draft: false
 showToc: false
@@ -14,6 +13,8 @@ cover:
     caption: "Photo of the Moon I took on June 18th. Edited by Gemini."
     relative: false
 ---
+
+First post — defining the blog's direction and principles.
 
 <!--more-->
 
