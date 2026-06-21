@@ -1,7 +1,7 @@
 {{- with site.Params.homeInfoParams }}
 <article class="first-entry home-info">
     <header class="entry-header">
-        <img class="home-avatar" src="/me.jpg" alt="My photo">
+        <img class="home-avatar" src="{{ "me.jpg" | absURL }}" alt="My photo">
         <h1>{{ .Title | markdownify }}</h1>
     </header>
     <div class="entry-content md-content">
