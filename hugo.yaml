@@ -25,6 +25,8 @@ params:
   description: "My personal blog"
   DateFormat: "January 2, 2006"
   defaultTheme: auto
+  comments: true
+  cusdisAppId: "ac011325-3064-46e4-b2f3-8d6fcef42bbd"
 
   ShowReadingTime: true
   ShowBreadCrumbs: true
