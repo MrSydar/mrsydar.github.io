@@ -2,6 +2,7 @@
 title: "Attention Is All You Need"
 date: 2026-06-18
 author: "Me"
+tags: ["First Post", "Welcome", "Hello World"]
 draft: false
 showToc: false
 ShowReadingTime: true
