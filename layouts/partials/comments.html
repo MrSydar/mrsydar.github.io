@@ -144,9 +144,6 @@
     font-size: 15px;
     display: none;
   }
-  .cusdis-message.visible {
-    display: block;
-  }
   .cusdis-error {
     color: #ef4444;
     font-size: 14px;
@@ -223,11 +220,11 @@
     try { return new Date(iso).toLocaleString(); } catch (e) { return iso; }
   }
 
-  function renderComment(c, isReply) {
+  function renderComment(c) {
     const author = esc(c.by_nickname || 'Anonymous');
     const date = fmtDate(c.createdAt);
     const body = esc(c.content || '');
-    let html = '<div class="cusdis-comment' + (isReply ? ' cusdis-reply' : '') + '">' +
+    let html = '<div class="cusdis-comment">' +
       '<div class="cusdis-comment-header">' +
         '<span class="cusdis-comment-author">' + author + '</span>' +
         '<span class="cusdis-comment-date">' + date + '</span>' +
@@ -235,7 +232,7 @@
       '<div class="cusdis-comment-body">' + body + '</div>';
     if (c.replies && c.replies.data && c.replies.data.length) {
       html += '<div class="cusdis-comment-replies">';
-      c.replies.data.forEach(function(r) { html += renderComment(r, true); });
+      c.replies.data.forEach(function(r) { html += renderComment(r); });
       html += '</div>';
     }
     html += '</div>';
@@ -262,11 +259,10 @@
         listEl.innerHTML = '<p class="cusdis-empty">No comments yet. Be the first to share your thoughts.</p>';
       } else {
         let html = '';
-        comments.forEach(function(c) { html += renderComment(c, false); });
+        comments.forEach(function(c) { html += renderComment(c); });
         listEl.innerHTML = html;
       }
     } catch (e) {
-      console.error('[cusdis]', e);
       listEl.innerHTML = '<p class="cusdis-empty">Unable to load comments.</p>';
     }
   }
@@ -303,9 +299,8 @@
       });
       if (!res.ok) throw new Error('HTTP ' + res.status);
       formEl.style.display = 'none';
-      msgEl.classList.add('visible');
+      msgEl.style.display = 'block';
     } catch (err) {
-      console.error('[cusdis]', err);
       showError('Something went wrong. Please try again.');
     } finally {
       btn.disabled = false;
