@@ -1,0 +1,314 @@
+{{- if not .Params.disableComments -}}
+<style>
+  .post-comments {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+  }
+  .post-comments-header {
+    margin-bottom: 1.5rem;
+  }
+  .post-comments-header h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary);
+    letter-spacing: -0.025em;
+    margin-bottom: 0.3rem;
+  }
+  .post-comments-header p {
+    font-size: 0.9rem;
+    color: var(--secondary);
+    margin: 0;
+  }
+
+  .cusdis-loading,
+  .cusdis-empty {
+    color: var(--secondary);
+    font-size: 15px;
+    margin-bottom: 1rem;
+  }
+
+  .cusdis-comment {
+    margin-bottom: 1.5rem;
+  }
+  .cusdis-comment:last-child {
+    margin-bottom: 0;
+  }
+  .cusdis-comment-header {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 0.4rem;
+  }
+  .cusdis-comment-author {
+    font-weight: 600;
+    color: var(--primary);
+    font-size: 15px;
+  }
+  .cusdis-comment-date {
+    font-size: 13px;
+    color: var(--secondary);
+  }
+  .cusdis-comment-body {
+    color: var(--content);
+    font-size: 16px;
+    line-height: 1.6;
+    white-space: pre-wrap;
+  }
+  .cusdis-comment-replies {
+    margin-top: 1rem;
+    margin-left: 1rem;
+    padding-left: 1rem;
+    border-left: 2px solid var(--border);
+  }
+
+  .cusdis-form {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: var(--entry);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+  }
+  .cusdis-form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  @media (max-width: 600px) {
+    .cusdis-form-row {
+      grid-template-columns: 1fr;
+    }
+  }
+  .cusdis-form-group {
+    margin-bottom: 1rem;
+  }
+  .cusdis-form-group:last-child {
+    margin-bottom: 0;
+  }
+  .cusdis-form label {
+    display: block;
+    margin-bottom: 0.35rem;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--secondary);
+  }
+  .cusdis-form label .optional {
+    font-weight: 400;
+    color: var(--tertiary);
+  }
+  .cusdis-form input,
+  .cusdis-form textarea {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--theme);
+    color: var(--primary);
+    font-size: 15px;
+    font-family: inherit;
+    line-height: 1.5;
+    outline: none;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .cusdis-form input:focus,
+  .cusdis-form textarea:focus {
+    border-color: var(--tertiary);
+  }
+  .cusdis-form textarea {
+    min-height: 100px;
+    resize: vertical;
+  }
+  .cusdis-form button[type="submit"] {
+    background: var(--primary);
+    color: var(--theme);
+    border: none;
+    border-radius: var(--radius);
+    padding: 10px 22px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+  .cusdis-form button[type="submit"]:hover {
+    opacity: 0.85;
+  }
+
+  .cusdis-message {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    background: var(--entry);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--secondary);
+    font-size: 15px;
+    display: none;
+  }
+  .cusdis-error {
+    color: #ef4444;
+    font-size: 14px;
+    margin-top: 0.5rem;
+  }
+</style>
+
+<div class="post-comments">
+  <div class="post-comments-header">
+    <h3>Discussion</h3>
+    <p>Leave a comment — no account required.</p>
+  </div>
+
+  <div id="cusdis-custom"
+    data-app-id="{{ .Site.Params.cusdisAppId }}"
+    data-page-id="{{ .RelPermalink }}"
+    data-page-url="{{ .Permalink }}"
+    data-page-title="{{ .Title }}">
+
+    <div id="cusdis-list">
+      <p class="cusdis-loading">Loading comments…</p>
+    </div>
+
+    <form id="cusdis-form" class="cusdis-form" autocomplete="off">
+      <div class="cusdis-form-row">
+        <div class="cusdis-form-group">
+          <label for="cusdis-nickname">Nickname</label>
+          <input type="text" id="cusdis-nickname" name="nickname" placeholder="Your name" required>
+        </div>
+        <div class="cusdis-form-group">
+          <label for="cusdis-email">Email <span class="optional">(optional)</span></label>
+          <input type="email" id="cusdis-email" name="email" placeholder="you@example.com">
+        </div>
+      </div>
+      <div class="cusdis-form-group">
+        <label for="cusdis-content">Comment</label>
+        <textarea id="cusdis-content" name="content" placeholder="Write something…" required></textarea>
+      </div>
+      <button type="submit">Comment</button>
+      <div id="cusdis-error" class="cusdis-error" style="display:none;"></div>
+    </form>
+
+    <div id="cusdis-message" class="cusdis-message">
+      Your comment has been sent. Please wait for approval.
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  const container = document.getElementById('cusdis-custom');
+  if (!container) return;
+
+  const cfg = {
+    host: 'https://cusdis.com',
+    appId: container.dataset.appId,
+    pageId: container.dataset.pageId,
+    pageUrl: container.dataset.pageUrl,
+    pageTitle: container.dataset.pageTitle,
+  };
+
+  const listEl = document.getElementById('cusdis-list');
+  const formEl = document.getElementById('cusdis-form');
+  const msgEl = document.getElementById('cusdis-message');
+  const errEl = document.getElementById('cusdis-error');
+
+  function esc(text) {
+    const d = document.createElement('div');
+    d.textContent = text;
+    return d.innerHTML;
+  }
+
+  function fmtDate(iso) {
+    try { return new Date(iso).toLocaleString(); } catch (e) { return iso; }
+  }
+
+  function renderComment(c) {
+    const author = esc(c.by_nickname || 'Anonymous');
+    const date = fmtDate(c.createdAt);
+    const body = esc(c.content || '');
+    let html = '<div class="cusdis-comment">' +
+      '<div class="cusdis-comment-header">' +
+        '<span class="cusdis-comment-author">' + author + '</span>' +
+        '<span class="cusdis-comment-date">' + date + '</span>' +
+      '</div>' +
+      '<div class="cusdis-comment-body">' + body + '</div>';
+    if (c.replies && c.replies.data && c.replies.data.length) {
+      html += '<div class="cusdis-comment-replies">';
+      c.replies.data.forEach(function(r) { html += renderComment(r); });
+      html += '</div>';
+    }
+    html += '</div>';
+    return html;
+  }
+
+  function showError(msg) {
+    errEl.textContent = msg;
+    errEl.style.display = 'block';
+  }
+  function hideError() {
+    errEl.textContent = '';
+    errEl.style.display = 'none';
+  }
+
+  async function load() {
+    try {
+      const res = await fetch(cfg.host + '/api/open/comments?page=1&appId=' + encodeURIComponent(cfg.appId) + '&pageId=' + encodeURIComponent(cfg.pageId));
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const json = await res.json();
+      const data = json.data || {};
+      const comments = data.data || [];
+      if (comments.length === 0) {
+        listEl.innerHTML = '<p class="cusdis-empty">No comments yet. Be the first to share your thoughts.</p>';
+      } else {
+        let html = '';
+        comments.forEach(function(c) { html += renderComment(c); });
+        listEl.innerHTML = html;
+      }
+    } catch (e) {
+      listEl.innerHTML = '<p class="cusdis-empty">Unable to load comments.</p>';
+    }
+  }
+
+  formEl.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    hideError();
+
+    const nickname = document.getElementById('cusdis-nickname').value.trim();
+    const email = document.getElementById('cusdis-email').value.trim();
+    const content = document.getElementById('cusdis-content').value.trim();
+
+    if (!nickname) { showError('Please enter a nickname.'); return; }
+    if (!content) { showError('Please write a comment.'); return; }
+
+    const btn = formEl.querySelector('button[type="submit"]');
+    const originalText = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = 'Sending…';
+
+    try {
+      const res = await fetch(cfg.host + '/api/open/comments', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          appId: cfg.appId,
+          pageId: cfg.pageId,
+          content: content,
+          nickname: nickname,
+          email: email || undefined,
+          pageUrl: cfg.pageUrl,
+          pageTitle: cfg.pageTitle,
+        }),
+      });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      formEl.style.display = 'none';
+      msgEl.style.display = 'block';
+    } catch (err) {
+      showError('Something went wrong. Please try again.');
+    } finally {
+      btn.disabled = false;
+      btn.textContent = originalText;
+    }
+  });
+
+  load();
+})();
+</script>
+{{- end -}}
